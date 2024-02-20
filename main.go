@@ -8,6 +8,8 @@ import (
 )
 
 func main() {
+
+	//initializing endpoints and general API foundation
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", homeHandler)
@@ -18,6 +20,8 @@ func main() {
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+
+	//description of my endpoints and how to use them
 	fmt.Fprintf(w, "Welcome to the calculator server!\n")
 	fmt.Fprintf(w, "Available endpoints:\n")
 	fmt.Fprintf(w, "- /add?num1=value1&num2=value2: Performs addition\n")
@@ -25,6 +29,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type operationResult struct {
+	//I define my JSON-Structure like so
 	Operation string  `json:"operation"`
 	Num1      float64 `json:"num1"`
 	Num2      float64 `json:"num2"`
@@ -32,6 +37,7 @@ type operationResult struct {
 }
 
 func addHandler(w http.ResponseWriter, r *http.Request) {
+	//setting the given path values
 	num1, err1 := parseFloatQuery(r, "num1")
 	num2, err2 := parseFloatQuery(r, "num2")
 	if err1 != nil || err2 != nil {
@@ -39,8 +45,10 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//performing the actual operation
 	result := num1 + num2
 
+	//Storing all that into my JSON
 	jsonResponse := operationResult{
 		Operation: "Addition",
 		Num1:      num1,
@@ -48,10 +56,12 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 		Result:    result,
 	}
 
+	//setting that the content type should be representated as JSON
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(jsonResponse)
 }
 
+// similar to my addHandler
 func subtractHandler(w http.ResponseWriter, r *http.Request) {
 	num1, err1 := parseFloatQuery(r, "num1")
 	num2, err2 := parseFloatQuery(r, "num2")
@@ -73,6 +83,7 @@ func subtractHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(jsonResponse)
 }
 
+// helper function to get my given path param numbers
 func parseFloatQuery(r *http.Request, param string) (float64, error) {
 	value := r.URL.Query().Get(param)
 	if value == "" {
