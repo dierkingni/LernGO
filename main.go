@@ -1,23 +1,59 @@
 package main
 
-import "fmt" //Import to be able to print the result to the console
+import (
+	"net/http"
+	"strconv"
 
-func calculate(num1 int, operator rune, num2 int) int {
-	switch operator {
-	case '+':
-		return num1 + num2
-	case '-':
-		return num1 - num2
-	default:
-		return 0
+	"github.com/gin-gonic/gin"
+)
+
+func add(context *gin.Context) {
+	num1Str := context.Param("num1")
+	num2Str := context.Param("num2")
+
+	num1, err := strconv.Atoi(num1Str)
+	if err != nil {
+
+		context.JSON(http.StatusBadRequest, gin.H{"error": "num1 must be an integer"})
+		return
 	}
+
+	num2, err := strconv.Atoi(num2Str)
+	if err != nil {
+
+		context.JSON(http.StatusBadRequest, gin.H{"error": "num2 must be an integer"})
+		return
+	}
+
+	result := num1 + num2
+	context.JSON(http.StatusOK, gin.H{"result": result})
+}
+
+func subtract(context *gin.Context) {
+	num1Str := context.Param("num1")
+	num2Str := context.Param("num2")
+
+	num1, err := strconv.Atoi(num1Str)
+	if err != nil {
+
+		context.JSON(http.StatusBadRequest, gin.H{"error": "num1 must be an integer"})
+		return
+	}
+
+	num2, err := strconv.Atoi(num2Str)
+	if err != nil {
+
+		context.JSON(http.StatusBadRequest, gin.H{"error": "num2 must be an integer"})
+		return
+	}
+
+	result := num1 - num2
+	context.JSON(http.StatusOK, gin.H{"result": result})
 }
 
 func main() {
-	num1 := 5
-	num2 := 7
-	operator := '-'
-
-	result := calculate(num1, operator, num2)
-	fmt.Println(result)
+	router := gin.Default()
+	router.GET("/add/:num1/:num2", add)
+	router.GET("/subtract/:num1/:num2", subtract)
+	router.Run("localhost:3000")
 }
