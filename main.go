@@ -1,59 +1,96 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
-func add(context *gin.Context) {
-	num1Str := context.Param("num1")
-	num2Str := context.Param("num2")
+func main() {
+	mux := http.NewServeMux()
 
-	num1, err := strconv.Atoi(num1Str)
-	if err != nil {
+	mux.HandleFunc("/", homeHandler)
+	mux.HandleFunc("/add", addHandler)
+	mux.HandleFunc("/subtract", subtractHandler)
 
-		context.JSON(http.StatusBadRequest, gin.H{"error": "num1 must be an integer"})
-		return
-	}
+	http.ListenAndServe(":8080", mux)
+}
 
-	num2, err := strconv.Atoi(num2Str)
-	if err != nil {
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Welcome to the calculator server!\n")
+	fmt.Fprintf(w, "Available endpoints:\n")
+	fmt.Fprintf(w, "- /add?num1=value1&num2=value2: Performs addition\n")
+	fmt.Fprintf(w, "- /subtract?num1=value1&num2=value2: Performs subtraction\n")
+}
 
-		context.JSON(http.StatusBadRequest, gin.H{"error": "num2 must be an integer"})
+type operationResult struct {
+	Operation string  `json:"operation"`
+	Num1      float64 `json:"num1"`
+	Num2      float64 `json:"num2"`
+	Result    float64 `json:"result"`
+}
+
+func addHandler(w http.ResponseWriter, r *http.Request) {
+	num1, err1 := parseFloatQuery(r, "num1")
+	num2, err2 := parseFloatQuery(r, "num2")
+	if err1 != nil || err2 != nil {
+		http.Error(w, "Invalid query parameters", http.StatusBadRequest)
 		return
 	}
 
 	result := num1 + num2
-	context.JSON(http.StatusOK, gin.H{"result": result})
-}
 
-func subtract(context *gin.Context) {
-	num1Str := context.Param("num1")
-	num2Str := context.Param("num2")
-
-	num1, err := strconv.Atoi(num1Str)
-	if err != nil {
-
-		context.JSON(http.StatusBadRequest, gin.H{"error": "num1 must be an integer"})
-		return
+	jsonResponse := operationResult{
+		Operation: "Addition",
+		Num1:      num1,
+		Num2:      num2,
+		Result:    result,
 	}
 
-	num2, err := strconv.Atoi(num2Str)
+	w.Header().Set("Content-Type", "application/json")
+	err := json.NewEncoder(w).Encode(jsonResponse)
 	if err != nil {
+		http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+		return
+	}
+}
 
-		context.JSON(http.StatusBadRequest, gin.H{"error": "num2 must be an integer"})
+func subtractHandler(w http.ResponseWriter, r *http.Request) {
+	num1, err1 := parseFloatQuery(r, "num1")
+	num2, err2 := parseFloatQuery(r, "num2")
+	if err1 != nil || err2 != nil {
+		http.Error(w, "Invalid query parameters", http.StatusBadRequest)
 		return
 	}
 
 	result := num1 - num2
-	context.JSON(http.StatusOK, gin.H{"result": result})
+
+	jsonResponse := operationResult{
+		Operation: "Subtraction",
+		Num1:      num1,
+		Num2:      num2,
+		Result:    result,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err := json.NewEncoder(w).Encode(jsonResponse)
+	if err != nil {
+		http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+		return
+	}
 }
 
-func main() {
-	router := gin.Default()
-	router.GET("/add/:num1/:num2", add)
-	router.GET("/subtract/:num1/:num2", subtract)
-	router.Run("localhost:3000")
+func parseFloatQuery(r *http.Request, param string) (float64, error) {
+	value := r.URL.Query().Get(param)
+	if value == "" {
+		return 0, fmt.Errorf("missing query parameter %s", param)
+	}
+
+	num, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		return 0, fmt.Errorf("invalid value for %s: %w", param, err)
+	}
+
+	return num, nil
 }
