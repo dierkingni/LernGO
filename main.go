@@ -49,11 +49,7 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	err := json.NewEncoder(w).Encode(jsonResponse)
-	if err != nil {
-		http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
-		return
-	}
+	json.NewEncoder(w).Encode(jsonResponse)
 }
 
 func subtractHandler(w http.ResponseWriter, r *http.Request) {
@@ -74,11 +70,7 @@ func subtractHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	err := json.NewEncoder(w).Encode(jsonResponse)
-	if err != nil {
-		http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
-		return
-	}
+	json.NewEncoder(w).Encode(jsonResponse)
 }
 
 func parseFloatQuery(r *http.Request, param string) (float64, error) {
