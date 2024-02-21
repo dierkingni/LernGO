@@ -1,5 +1,9 @@
 package p
 
+/*
+get the auth bearer token: gcloud auth print-identity-token
+*/
+
 import (
 	"encoding/json"
 	"fmt"
@@ -9,6 +13,8 @@ import (
 
 func CalculatorFunction(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
+	case "/":
+		homeHandler(w, r)
 	case "/add":
 		addHandler(w, r)
 	case "/subtract":
