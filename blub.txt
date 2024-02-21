@@ -1,0 +1,55 @@
+// Sample storage-quickstart creates a Google Cloud Storage bucket.
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"cloud.google.com/go/storage"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// Sets your Google Cloud Platform project ID.
+	projectID := "mms-clp-playground2402-a-i2ar"
+
+	// Creates a client.
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		log.Fatalf("Failed to create client: %v", err)
+	}
+
+	// Sets the name for the new bucket.
+	bucketName := "calculator-bucket"
+
+	// Holt den Bucket.
+	bucket := client.Bucket(bucketName)
+	if err := bucket.Create(ctx, projectID, nil); err != nil {
+		// TODO: Handle error.
+	}
+	attrs, err := bucket.Attrs(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	fmt.Printf("bucket %s, created at %s, is located in %s with storage class %s\n",
+		attrs.Name, attrs.Created, attrs.Location, attrs.StorageClass)
+
+	obj := bucket.Object("blub")
+
+	// Create a byte slice.
+	bytes := []byte("servus")
+
+	writer := obj.NewWriter(ctx)
+	_, err = writer.Write(bytes)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Close the writer.
+	err = writer.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+}

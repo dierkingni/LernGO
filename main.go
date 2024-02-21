@@ -5,10 +5,15 @@ get the auth bearer token: gcloud auth print-identity-token
 */
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
+	"time"
+
+	"cloud.google.com/go/storage"
 )
 
 func CalculatorFunction(w http.ResponseWriter, r *http.Request) {
@@ -86,6 +91,7 @@ func subtractHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(jsonResponse)
+	BucketManipulation(jsonResponse)
 }
 
 // helper function to get my given path param numbers
@@ -101,4 +107,52 @@ func parseFloatQuery(r *http.Request, param string) (float64, error) {
 	}
 
 	return num, nil
+}
+
+func BucketManipulation() {
+	ctx := context.Background()
+
+	// Sets your Google Cloud Platform project ID.
+	projectID := "mms-clp-playground2402-a-i2ar"
+
+	// Creates a client.
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		log.Fatalf("Failed to create client: %v", err)
+	}
+
+	// Sets the name for the new bucket.
+	bucketName := "calculator-bucket"
+
+	// Gets the Bucket.
+	bucket := client.Bucket(bucketName)
+	if err := bucket.Create(ctx, projectID, nil); err != nil {
+		// TODO: Handle error.
+	}
+	attrs, err := bucket.Attrs(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	fmt.Printf("bucket %s, created at %s, is located in %s with storage class %s\n",
+		attrs.Name, attrs.Created, attrs.Location, attrs.StorageClass)
+
+	//create a new object based on the time
+	timestamp := time.Now().Format("2006-01-02T15-04-05")
+
+	obj := bucket.Object(timestamp)
+
+	// Create a byte slice.
+	bytes := []byte(JSONresponse.operationResult)
+
+	writer := obj.NewWriter(ctx)
+	_, err = writer.Write(bytes)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Close the writer.
+	err = writer.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
