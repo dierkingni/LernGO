@@ -1,4 +1,4 @@
-package main
+package p
 
 import (
 	"encoding/json"
@@ -7,16 +7,15 @@ import (
 	"strconv"
 )
 
-func main() {
-
-	//initializing endpoints and general API foundation
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("/", homeHandler)
-	mux.HandleFunc("/add", addHandler)
-	mux.HandleFunc("/subtract", subtractHandler)
-
-	http.ListenAndServe(":8080", mux)
+func CalculatorFunction(w http.ResponseWriter, r *http.Request) {
+	switch r.URL.Path {
+	case "/add":
+		addHandler(w, r)
+	case "/subtract":
+		subtractHandler(w, r)
+	default:
+		http.Error(w, "Endpoint not found", http.StatusNotFound)
+	}
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
