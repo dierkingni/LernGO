@@ -1,0 +1,97 @@
+openapi: 3.0.0
+info:
+  title: Rechner-API
+  description: Diese API bietet grundlegende Rechenoperationen an.
+  version: 1.0.0
+servers:
+  - url: https://europe-west1-mms-clp-playground2402-a-i2ar.cloudfunctions.net/testing
+paths:
+  /:
+    get:
+      summary: Zeigt die Startseite der API an.
+      tags:
+        - Info
+      responses:
+        200:
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+  /add:
+    get:
+      summary: Führt zwei Zahlen addiert.
+      tags:
+        - Rechenoperationen
+      parameters:
+        - name: num1
+          in: query
+          description: Die erste Zahl.
+          required: true
+          schema:
+            type: number
+        - name: num2
+          in: query
+          description: Die zweite Zahl.
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  operation:
+                    type: string
+                    example: Addition
+                  num1:
+                    type: number
+                    example: 9
+                  num2:
+                    type: number
+                    example: 13
+                  result:
+                    type: number
+                    example: 22
+  /subtract:
+    get:
+      summary: Führt zwei Zahlen subtrahiert.
+      tags:
+        - Rechenoperationen
+      parameters:
+        - name: num1
+          in: query
+          description: Die erste Zahl.
+          required: true
+          schema:
+            type: number
+        - name: num2
+          in: query
+          description: Die zweite Zahl.
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  operation:
+                    type: string
+                    example: Subtraktion
+                  num1:
+                    type: number
+                    example: 9
+                  num2:
+                    type: number
+                    example: 13
+                  result:
+                    type: number
+                    example: -4
+  
