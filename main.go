@@ -4,6 +4,10 @@ package p
 get the auth bearer token: gcloud auth print-identity-token
 */
 
+/*
+login: gcloud auth application-default login
+*/
+
 import (
 	"context"
 	"encoding/json"
@@ -91,7 +95,7 @@ func subtractHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(jsonResponse)
-	BucketManipulation(jsonResponse)
+	BucketManipulation()
 }
 
 // helper function to get my given path param numbers
@@ -142,7 +146,7 @@ func BucketManipulation() {
 	obj := bucket.Object(timestamp)
 
 	// Create a byte slice.
-	bytes := []byte(JSONresponse.operationResult)
+	bytes := []byte("hello")
 
 	writer := obj.NewWriter(ctx)
 	_, err = writer.Write(bytes)
