@@ -15,7 +15,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"cloud.google.com/go/storage"
 )
@@ -73,7 +72,6 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	//setting that the content type should be representated as JSON
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(jsonResponse)
-	BucketManipulation(jsonResponse)
 }
 
 // similar to my addHandler
@@ -96,7 +94,7 @@ func subtractHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(jsonResponse)
-	BucketManipulation(jsonResponse)
+	BucketManipulation()
 }
 
 // helper function to get my given path param numbers
@@ -114,7 +112,7 @@ func parseFloatQuery(r *http.Request, param string) (float64, error) {
 	return num, nil
 }
 
-func BucketManipulation(operationResult operationResult) {
+func BucketManipulation() {
 	ctx := context.Background()
 
 	// Sets your Google Cloud Platform project ID.
@@ -132,28 +130,30 @@ func BucketManipulation(operationResult operationResult) {
 	// Holt den Bucket.
 	bucket := client.Bucket(bucketName)
 	if err := bucket.Create(ctx, projectID, nil); err != nil {
-		//log.Fatalf("Failed to create bucket: %v", err)
+		log.Fatalf("Failed to create bucket: %v", err)
+
 	}
 
-	// Create a new object based on the time
-	timestamp := time.Now().Format("2006-01-02T15-04-05")
-
-	obj := bucket.Object(timestamp + ".json") // Add ".json" extension
-
-	// Convert the operationResult struct to a JSON byte slice
-	jsonData, err := json.Marshal(operationResult)
+	attrs, err := bucket.Attrs(ctx)
 	if err != nil {
-		log.Fatal(err)
-	}
+		log.Fatalf("Failed to get bucket attributes: %v", err)
 
-	// Create a writer for the object
+	}
+	fmt.Printf("bucket %s, created at %s, is located in %s with storage class %s\n",
+		attrs.Name, attrs.Created, attrs.Location, attrs.StorageClass)
+
+	obj := bucket.Object("blub")
+
+	// Create a byte slice.
+	bytes := []byte("servus")
+
 	writer := obj.NewWriter(ctx)
-	_, err = writer.Write(jsonData)
+	_, err = writer.Write(bytes)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Close the writer
+	// Close the writer.
 	err = writer.Close()
 	if err != nil {
 		log.Fatal(err)
