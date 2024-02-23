@@ -1,6 +1,3 @@
-locals {
-    project_id = "mms-clp-playground2402-a-i2ar"
-}
 
 terraform {
   required_version = ">= 1.0"
