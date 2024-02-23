@@ -87,11 +87,11 @@ paths:
                     example: Subtraktion
                   num1:
                     type: number
-                    example: 9
+                    example: 30
                   num2:
                     type: number
-                    example: 13
+                    example: 9
                   result:
                     type: number
-                    example: -4
+                    example: 21
   
