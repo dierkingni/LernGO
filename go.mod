@@ -1,6 +1,6 @@
 module example.com/calculate
 
-go 1.22.0
+go 1.23.0
 
 require (
 	cloud.google.com/go v0.112.0 // indirect
