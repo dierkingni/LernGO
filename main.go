@@ -1,4 +1,4 @@
-package p
+package main
 
 /*
 get the auth bearer token: gcloud auth print-identity-token
@@ -16,6 +16,12 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/go-chi/chi"
+
+	httpSwagger "github.com/swaggo/http-swagger/v2"
+
+	_ "example.com/calculate/docs"
 
 	"cloud.google.com/go/storage"
 )
@@ -158,4 +164,29 @@ func BucketManipulation(operationResult operationResult) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// AddNumbers godoc
+// @Summary Add two numbers
+// @Description Adds num1 and num2 and returns the result.
+// @Tags calculator
+// @Accept json
+// @Produce json
+// @Param num1 query float64 true "First number to add"
+// @Param num2 query float64 true "Second number to add"
+// @Success 200 {object} operationResult
+// @Router /add [get]
+
+func main() {
+	r := chi.NewRouter()
+
+	// Middleware, Router-Konfiguration oder andere Setups können hier platziert werden...
+
+	// Swagger handler
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:1323/swagger/doc.json"), // Die URL für die Swagger-JSON-Dokumentation
+	))
+
+	http.ListenAndServe(":1323", r)
+
 }
