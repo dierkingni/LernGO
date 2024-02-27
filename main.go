@@ -1,4 +1,4 @@
-package main
+package p
 
 /*
 get the auth bearer token: gcloud auth print-identity-token
@@ -17,19 +17,27 @@ import (
 	"strconv"
 	"time"
 
+	_ "example.com/calculate/docs"
 	"github.com/go-chi/chi"
 
-	httpSwagger "github.com/swaggo/http-swagger/v2"
-
-	_ "example.com/calculate/docs"
-
 	"cloud.google.com/go/storage"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
+// @title	Simple Calculator RestAPI new
 func CalculatorFunction(w http.ResponseWriter, r *http.Request) {
+
 	switch r.URL.Path {
-	case "/":
-		homeHandler(w, r)
+	case "/swagger/index.html":
+
+		x := chi.NewRouter()
+		// Swagger handler
+		x.Get("/swagger/*", httpSwagger.Handler(
+			httpSwagger.URL("https://europe-west1-mms-clp-playground2402-a-i2ar.cloudfunctions.net/testing/swagger/doc.json"),
+		))
+		http.ListenAndServe(":1323", x)
+		//homeHandler(w, r)
+
 	case "/add":
 		addHandler(w, r)
 	case "/subtract":
@@ -41,11 +49,12 @@ func CalculatorFunction(w http.ResponseWriter, r *http.Request) {
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 
-	//description of my endpoints and how to use them
-	fmt.Fprintf(w, "Welcome to the calculator server!\n")
-	fmt.Fprintf(w, "Available endpoints:\n")
-	fmt.Fprintf(w, "- /add?num1=value1&num2=value2: Performs addition\n")
-	fmt.Fprintf(w, "- /subtract?num1=value1&num2=value2: Performs subtraction\n")
+	x := chi.NewRouter()
+	// Swagger handler
+	x.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("https://europe-west1-mms-clp-playground2402-a-i2ar.cloudfunctions.net/testing/swagger/doc.json"),
+	))
+
 }
 
 type operationResult struct {
@@ -56,6 +65,17 @@ type operationResult struct {
 	Result    float64 `json:"result"`
 }
 
+// Add godoc
+//
+//	@Summary		add
+//	@Description	plus
+//	@Accept			json
+//	@Produce		plain
+//	@Param			num1	query		int		true	"used for calc"
+//	@Param			num2	query		int		true	"used for calc"
+//	@Success		200		{integer}	string	"answer"
+//
+// @Router			/add [get]
 func addHandler(w http.ResponseWriter, r *http.Request) {
 	//setting the given path values
 	num1, err1 := parseFloatQuery(r, "num1")
@@ -83,6 +103,18 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // similar to my addHandler
+
+// Subtract godoc
+//
+//	@Summary		subtract
+//	@Description	plus
+//	@Accept			json
+//	@Produce		plain
+//	@Param			num1	query		int		true	"used for calc"
+//	@Param			num2	query		int		true	"used for calc"
+//	@Success		200		{integer}	string	"answer"
+//
+// @Router			/subtract [get]
 func subtractHandler(w http.ResponseWriter, r *http.Request) {
 	num1, err1 := parseFloatQuery(r, "num1")
 	num2, err2 := parseFloatQuery(r, "num2")
@@ -166,27 +198,13 @@ func BucketManipulation(operationResult operationResult) {
 	}
 }
 
-// AddNumbers godoc
-// @Summary Add two numbers
-// @Description Adds num1 and num2 and returns the result.
-// @Tags calculator
-// @Accept json
-// @Produce json
-// @Param num1 query float64 true "First number to add"
-// @Param num2 query float64 true "Second number to add"
-// @Success 200 {object} operationResult
-// @Router /add [get]
-
+/*
 func main() {
 	r := chi.NewRouter()
-
-	// Middleware, Router-Konfiguration oder andere Setups können hier platziert werden...
-
 	// Swagger handler
 	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:1323/swagger/doc.json"), // Die URL für die Swagger-JSON-Dokumentation
+		httpSwagger.URL("http://localhost:1323/swagger/doc.json"),
 	))
-
 	http.ListenAndServe(":1323", r)
-
 }
+*/

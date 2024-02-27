@@ -1,4 +1,53 @@
 info:
   contact: {}
-paths: {}
+  title: Simple Calculator RestAPI new
+paths:
+  /add:
+    get:
+      consumes:
+      - application/json
+      description: plus
+      parameters:
+      - description: used for calc
+        in: query
+        name: num1
+        required: true
+        type: integer
+      - description: used for calc
+        in: query
+        name: num2
+        required: true
+        type: integer
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: answer
+          schema:
+            type: integer
+      summary: add
+  /subtract:
+    get:
+      consumes:
+      - application/json
+      description: plus
+      parameters:
+      - description: used for calc
+        in: query
+        name: num1
+        required: true
+        type: integer
+      - description: used for calc
+        in: query
+        name: num2
+        required: true
+        type: integer
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: answer
+          schema:
+            type: integer
+      summary: subtract
 swagger: "2.0"

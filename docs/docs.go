@@ -14,7 +14,80 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/add": {
+            "get": {
+                "description": "plus",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "summary": "add",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "used for calc",
+                        "name": "num1",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "used for calc",
+                        "name": "num2",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "answer",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/subtract": {
+            "get": {
+                "description": "plus",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "summary": "subtract",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "used for calc",
+                        "name": "num1",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "used for calc",
+                        "name": "num2",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "answer",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
@@ -23,7 +96,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
+	Title:            "Simple Calculator RestAPI new",
 	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
