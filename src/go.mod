@@ -1,4 +1,4 @@
-module example.com/calculate
+module example.com/cloudfunction
 
 go 1.22.0
 
@@ -30,7 +30,9 @@ require (
 	github.com/googleapis/gax-go/v2 v2.12.1 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/swaggo/files v1.0.1 // indirect
 	github.com/swaggo/files/v2 v2.0.0 // indirect
+	github.com/swaggo/http-swagger v1.3.4 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.48.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.48.0 // indirect

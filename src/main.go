@@ -17,27 +17,37 @@ import (
 	"strconv"
 	"time"
 
-	_ "example.com/calculate/docs"
-	"github.com/go-chi/chi"
+	_ "example.com/cloudfunction/docs"
+
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 
 	"cloud.google.com/go/storage"
-	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
-// @title	Simple Calculator RestAPI new
+// @title	Simple Calculator RestAPI
 func CalculatorFunction(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/swagger/index.html" {
+		httpSwagger.WrapHandler(w, r)
+		return
+	}
+	if r.URL.Path == "/swagger/swagger-ui.css" {
+		httpSwagger.WrapHandler(w, r)
+		return
+	}
+	if r.URL.Path == "/swagger/swagger-ui-bundle.js" {
+		httpSwagger.WrapHandler(w, r)
+		return
+	}
+	if r.URL.Path == "/swagger/swagger-ui-standalone-preset.js" {
+		httpSwagger.WrapHandler(w, r)
+		return
+	}
+	if r.URL.Path == "/swagger/doc.json" {
+		httpSwagger.WrapHandler(w, r)
+		return
+	}
 
 	switch r.URL.Path {
-	case "/swagger/index.html":
-
-		x := chi.NewRouter()
-		// Swagger handler
-		x.Get("/swagger/*", httpSwagger.Handler(
-			httpSwagger.URL("https://europe-west1-mms-clp-playground2402-a-i2ar.cloudfunctions.net/testing/swagger/doc.json"),
-		))
-		http.ListenAndServe(":1323", x)
-		//homeHandler(w, r)
-
 	case "/add":
 		addHandler(w, r)
 	case "/subtract":
@@ -45,16 +55,6 @@ func CalculatorFunction(w http.ResponseWriter, r *http.Request) {
 	default:
 		http.Error(w, "Endpoint not found", http.StatusNotFound)
 	}
-}
-
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-
-	x := chi.NewRouter()
-	// Swagger handler
-	x.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("https://europe-west1-mms-clp-playground2402-a-i2ar.cloudfunctions.net/testing/swagger/doc.json"),
-	))
-
 }
 
 type operationResult struct {
@@ -197,14 +197,3 @@ func BucketManipulation(operationResult operationResult) {
 		log.Fatal(err)
 	}
 }
-
-/*
-func main() {
-	r := chi.NewRouter()
-	// Swagger handler
-	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:1323/swagger/doc.json"),
-	))
-	http.ListenAndServe(":1323", r)
-}
-*/

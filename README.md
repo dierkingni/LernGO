@@ -1,5 +1,3 @@
-
-
 1) Erstellen einer Calculator Cloud Function API
 
 Erstelle eine kleine REST-API, welche zwei Zahlen addieren bzw. subtrahieren kann (jeweils ein Endpunkt).

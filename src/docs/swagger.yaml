@@ -1,6 +1,6 @@
 info:
   contact: {}
-  title: Simple Calculator RestAPI new
+  title: Simple Calculator RestAPI
 paths:
   /add:
     get:
