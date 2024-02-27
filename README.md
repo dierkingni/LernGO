@@ -1,4 +1,4 @@
-# I am learning GO in this repository
+
 
 1) Erstellen einer Calculator Cloud Function API
 
