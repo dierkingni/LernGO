@@ -11,3 +11,11 @@ resource "google_storage_bucket" "my-bucket" {
 
 
 }
+
+resource "google_iam_workload_identity_pool" "example" {
+  workload_identity_pool_id = "example-pool"
+  display_name              = "Name of pool"
+  description               = "Identity pool for automated test"
+  disabled                  = true
+  provider = 
+}

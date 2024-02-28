@@ -1,3 +1,9 @@
+resource "google_service_account" "service_account" {
+  account_id   = "githubactions-cloudfunctions-556655823"
+  display_name = "githubactions-cloudfunctions"
+}
+
+ 
 resource "google_project_iam_binding" "service-account" {
   project = "mms-clp-playground2402-a-i2ar"
   role    = "roles/storage.objectUser"
