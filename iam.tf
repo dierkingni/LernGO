@@ -16,7 +16,7 @@ resource "google_project_iam_binding" "github-service-account" {
     "roles/cloudfunctions.admin",
     "roles/cloudfunctions.serviceAgent"
   ])
-   role = each.key
+  role = each.key
   members = [
     "serviceAccount:githubactions@mms-clp-playground2402-a-i2ar.iam.gserviceaccount.com",
   ]
