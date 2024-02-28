@@ -1,4 +1,4 @@
-name: Deployment
+name: CloudDeployment
 
 # on commit push, run job
 on:
@@ -22,7 +22,7 @@ jobs:
           name: calculator-rest-API
           description: implements a calculator rest api via cloud functions 
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          region: europe-west4
+          region: europe-west1
           source_dir: src
           # name of our function in our main.py file, defaults to the resource name suffix 
           entry_point: CalculatorFunction
