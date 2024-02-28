@@ -2,6 +2,7 @@ resource "google_project_iam_binding" "service-account" {
   project = "mms-clp-playground2402-a-i2ar"
   for_each = toset([
     "roles/storage.objectUser",
+    "roles/artifactregistry.reader"
 
   ])
   role = each.key
