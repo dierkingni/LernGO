@@ -3,7 +3,8 @@ resource "google_project_iam_binding" "service-account" {
   for_each = toset([
     "roles/storage.objectUser",
     "roles/iam.serviceAccountUser",
-    "roles/artifactregistry.reader"
+    "roles/artifactregistry.reader",
+    "roles/cloudfunctions.developer",
   ])
   role = each.key
   members = [
