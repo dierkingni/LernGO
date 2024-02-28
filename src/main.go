@@ -15,6 +15,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	_ "example.com/cloudfunction/docs"
@@ -26,23 +27,30 @@ import (
 
 // @title	Simple Calculator RestAPI
 func CalculatorFunction(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/swagger/index.html" {
-		httpSwagger.WrapHandler(w, r)
-		return
-	}
-	if r.URL.Path == "/swagger/swagger-ui.css" {
-		httpSwagger.WrapHandler(w, r)
-		return
-	}
-	if r.URL.Path == "/swagger/swagger-ui-bundle.js" {
-		httpSwagger.WrapHandler(w, r)
-		return
-	}
-	if r.URL.Path == "/swagger/swagger-ui-standalone-preset.js" {
-		httpSwagger.WrapHandler(w, r)
-		return
-	}
-	if r.URL.Path == "/swagger/doc.json" {
+	/*
+		if r.URL.Path == "/swagger/index.html" {
+			httpSwagger.WrapHandler(w, r)
+			return
+		}
+		if r.URL.Path == "/swagger/swagger-ui.css" {
+			httpSwagger.WrapHandler(w, r)
+			return
+		}
+		if r.URL.Path == "/swagger/swagger-ui-bundle.js" {
+			httpSwagger.WrapHandler(w, r)
+			return
+		}
+		if r.URL.Path == "/swagger/swagger-ui-standalone-preset.js" {
+			httpSwagger.WrapHandler(w, r)
+			return
+		}
+		if r.URL.Path == "/swagger/doc.json" {
+			httpSwagger.WrapHandler(w, r)
+			return
+		}
+	*/
+
+	if strings.HasPrefix(r.URL.Path, "/swagger/") {
 		httpSwagger.WrapHandler(w, r)
 		return
 	}
@@ -177,22 +185,20 @@ func BucketManipulation(operationResult operationResult) {
 	timestamp := time.Now().Format("2006-01-02T15-04-05")
 
 	obj := bucket.Object(timestamp + ".json") // Add ".json" extension
-
 	// Convert the operationResult struct to a JSON byte slice
-	jsonData, err := json.Marshal(operationResult)
+	jsonData, err := json.MarshalIndent(operationResult, "", "  ")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Create a writer for the object
 	writer := obj.NewWriter(ctx)
-	_, err = writer.Write(jsonData)
-	if err != nil {
-		log.Fatal(err)
-	}
+	writer.ContentType = "application/json"
 
 	// Close the writer
-	err = writer.Close()
+	defer writer.Close()
+
+	_, err = writer.Write(jsonData)
 	if err != nil {
 		log.Fatal(err)
 	}
