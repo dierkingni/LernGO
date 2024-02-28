@@ -2,9 +2,6 @@ resource "google_project_iam_binding" "service-account" {
   project = "mms-clp-playground2402-a-i2ar"
   for_each = toset([
     "roles/storage.objectUser",
-    "roles/iam.serviceAccountUser",
-    "roles/artifactregistry.reader",
-    "roles/cloudfunctions.developer",
   ])
   role = each.key
   members = [
@@ -18,7 +15,6 @@ resource "google_project_iam_binding" "github-service-account" {
     "roles/storage.admin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/cloudfunctions.admin",
-    "roles/ml.serviceAgent"
 
   ])
   role = each.key
