@@ -18,6 +18,7 @@ resource "google_project_iam_binding" "github-service-account" {
     "roles/storage.admin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/cloudfunctions.admin",
+    "roles/iam.serviceAccountAdmin"
   ])
   role = each.key
   members = [
