@@ -15,7 +15,8 @@ resource "google_project_iam_binding" "github-service-account" {
   for_each = toset([
     "roles/storage.admin",
     "roles/resourcemanager.projectIamAdmin",
-    "roles/cloudfunctions.admin"
+    "roles/cloudfunctions.admin",
+    "roles/cloudfunctions.serviceAgent"
   ])
   role = each.key
   members = [
