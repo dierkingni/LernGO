@@ -25,8 +25,4 @@ jobs:
       with:
         name: 'my-function'
         runtime: 'nodejs20'
-  
-    # Example of using the output
-    - id: 'test'
-      run: 'curl "${{ steps.deploy.outputs.url }}"'    
-  
+        region: 'europe-west1'
