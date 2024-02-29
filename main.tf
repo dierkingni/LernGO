@@ -1,5 +1,5 @@
 provider "google" {
-  project = "mms-clp-playground2402-a-i2ar"
+  project = "mms-clp-playground2402-a-x11e"
   region  = "europe-west4"
 }
 
