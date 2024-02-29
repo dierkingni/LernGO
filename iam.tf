@@ -5,7 +5,7 @@ resource "google_service_account" "service_account" {
 }
 
 
-resource "google_project_iam_binding" "service-account" {
+resource "google_project_iam_binding" "service_account" {
   project = "mms-clp-playground2402-a-x11e"
   role    = "roles/storage.objectUser"
   members = [
@@ -13,7 +13,7 @@ resource "google_project_iam_binding" "service-account" {
   ]
 }
 
-resource "google_project_iam_binding" "github-service-account" {
+resource "google_project_iam_binding" "github-service_account" {
   project = "mms-clp-playground2402-a-x11e"
   for_each = toset([
    "roles/cloudfunctions.developer",
