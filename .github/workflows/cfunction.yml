@@ -25,7 +25,7 @@ jobs:
       with:
         name: 'Calculator-API'
         runtime: 'go121'
-        entrypoint: 'CalculatorFunction'
+        entry_point: 'CalculatorFunction'
         region: 'europe-west1'
         source_dir: test
         project_id: ${{ secrets.GCP_PROJECT_ID }}
