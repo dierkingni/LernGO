@@ -27,3 +27,4 @@ resource "google_project_iam_binding" "github-service-account" {
     "serviceAccount:githubactions-cloudfunctions@mms-clp-playground2402-a-x11e.iam.gserviceaccount.com",
   ]
 }
+
