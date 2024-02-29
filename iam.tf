@@ -1,6 +1,7 @@
 resource "google_service_account" "service_account" {
-  account_id   = "githubactions-cloudfunctions"
-  display_name = "githubactions-cloudfunctions"
+  account_id                   = "githubactions-cloudfunctions"
+  display_name                 = "githubactions-cloudfunctions"
+  create_ignore_already_exists = true
 }
 
 
@@ -18,7 +19,8 @@ resource "google_project_iam_binding" "github-service-account" {
     "roles/storage.admin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/cloudfunctions.admin",
-    "roles/iam.serviceAccountAdmin"
+    "roles/iam.serviceAccountAdmin",
+    "roles/iam.workloadIdentityUser"
   ])
   role = each.key
   members = [
