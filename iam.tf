@@ -1,11 +1,11 @@
 resource "google_service_account" "service_account" {
   account_id                   = "githubactions-cloudfunctions"
   display_name                 = "githubactions-cloudfunctions"
-  create_ignore_already_exists = true
+  create_ignore_already_exists = "true"
 }
 
 
-resource "google_project_iam_binding" "service-account" {
+resource "google_project_iam_binding" "service-account"{
   project = "mms-clp-playground2402-a-x11e"
   role    = "roles/storage.objectUser"
   members = [
