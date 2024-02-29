@@ -23,9 +23,10 @@ jobs:
     - id: 'deploy'
       uses: 'google-github-actions/deploy-cloud-functions@v2'
       with:
-        name: 'Calculator-API'
-        runtime: 'go121'
-        entry_point: 'CalculatorFunction'
-        region: 'europe-west1'
-        source_dir: 'test'
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        name: 'my-function'
+        runtime: 'nodejs20'
+  
+    # Example of using the output
+    - id: 'test'
+      run: 'curl "${{ steps.deploy.outputs.url }}"'    
+  
