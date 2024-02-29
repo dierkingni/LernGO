@@ -5,7 +5,7 @@ resource "google_service_account" "service_account" {
 }
 
 
-resource "google_project_iam_binding" "service-account"{
+resource "google_project_iam_binding" "service-account" {
   project = "mms-clp-playground2402-a-x11e"
   role    = "roles/storage.objectUser"
   members = [
